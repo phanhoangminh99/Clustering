@@ -1,14 +1,16 @@
-# Clustering Project
-## I. Introduce Dataset
+<h1> Clustering Project
+
+# Introduce Dataset
 
 Dataset show average life expectancy of countries and relate variables(2020):
 
 ![image](https://user-images.githubusercontent.com/110837675/202417099-cd649697-1fdb-431f-85fe-ca947791a05b.png)
 
-With this dataset, I will Subgroups of countries by GDP per capital.
+With this dataset, I will categorize countries into subgroups based on their GDP per capita.
 
-## II. Data Processing And Visualization
-   #### A. Data Processing
+# Data Processing And Visualization
+
+### 1. Data Processing
    
   Check columns to see if any have NAN values?
 ```php
@@ -18,9 +20,10 @@ df.isnull().sum()
 
 Data doesn't have NAN values.
 
-  #### B. Visualization
-  Data visualization by scatter chart to see the correlation of the Life Expectancy (Year) column with other columns.
+### 2. Visualization
   ```php
+# Visualize data with a scatter chart to see the correlation of the Life Expectancy (Year) column with other columns.
+
 fig, axes = plt.subplots(2, 3, figsize=(20, 10))
 sns.scatterplot(ax=axes[0, 0], data=df, x='CO2 emissions (Billion tons)', y='Life Expectancy (Year)', s=200, alpha=0.7,color='red')
 axes[0,0].grid(True)
@@ -43,14 +46,15 @@ sns.heatmap(corr1, square= True, annot= True, fmt= '.2f', annot_kws= {'size':16}
 ```
 ![image](https://user-images.githubusercontent.com/110837675/202419617-d2e6541c-452e-4abf-9d05-edb7a0e2ec02.png)
 
-### III. Data Processing
+# Data Processing
 
-I will drop Country columns. Because this columns contains word.
+I will drop 'Country' columns. Because this columns contains word.
 
 ```php
 data= df.drop(['Country'], axis='columns')
 df1= data.values
 ```
+
 Next, to make sure that the model have a good result, we must scaler data about the same range of values 0 and 1. I will use MinmaxScaler for data.
 ```php
 from sklearn.preprocessing import StandardScaler
@@ -60,7 +64,8 @@ data_scaled= pd.DataFrame(x, columns=data.columns)
 data_scaled
 ```
 I will find the number of best match groups using elbow method and Silhouette_score.
- - ELBOW
+
+### 1. ELBOW
  ```php
  k_war= {
 'init':'random',
@@ -85,7 +90,8 @@ plt.ylabel("SSE");
 ![image](https://user-images.githubusercontent.com/110837675/202424684-b82b278c-51ad-499f-9e23-ee4431dbb0f3.png)
 
 The slope of the downward curve is very uniform, making it very difficult to choose the number of groups. I will draw Silhouette_score method.
-- Silhouette_score.
+
+### 2. Silhouette_score.
 ```php
 silhouette= []
 for i in range(2,11):
@@ -111,11 +117,11 @@ Besides, I wil use KneeLocator to determine elbow.
 
 The results is k=3.
 
-### IV. Build Model.
+# Build Model.
 
 I will use K-MEANS, Hierarchical Clustering, Probabilistic Clustering to compare with each other.
 
-  #### A. K-MEANS.
+### 1. K-MEANS.
   
   ```php
   kmeans = KMeans(n_clusters = 3, init = 'k-means++', random_state = 42)
@@ -167,7 +173,7 @@ fig.show()
 ```
 ![image](https://user-images.githubusercontent.com/110837675/202429948-77531a26-0d0b-40c3-b2e1-b6172c0d252b.png)
 
-  #### B.Hierarchical Clustering.
+### 2. Hierarchical Clustering.
   
   I will plot dendrogram to determine cluster.
   
@@ -204,7 +210,8 @@ fig.show()
 ```
 ![image](https://user-images.githubusercontent.com/110837675/202431141-ddeeae38-d48e-4e9a-aec6-244516470d67.png)
 
-  #### C.Probabilistic Clustering
+### 3. Probabilistic Clustering
+
 ```php
 from sklearn.mixture import GaussianMixture
 gmm = GaussianMixture(n_components=3)
@@ -231,7 +238,7 @@ fig.show()
 ```
 ![image](https://user-images.githubusercontent.com/110837675/202431596-53e8f5c4-9fa5-4a56-89ee-d3c9be57c033.png)
 
-### V. Compare model.
+# Compare model.
 
 ![image](https://user-images.githubusercontent.com/110837675/202431821-225c239f-1a7d-4ffa-b2df-2ceb20d68206.png)
 
@@ -239,7 +246,7 @@ Grouping with K-means is the most reasonable.
 
 ![image](https://user-images.githubusercontent.com/110837675/202432313-372981fa-bebb-4d02-ae3f-473a24394dbf.png)
 
-### VI. Analysis after grouped Country follow GDP.
+# Analysis after grouped Country follow GDP.
 ```php
 plt.figure(figsize=(12,6))
 plt.grid(True)
